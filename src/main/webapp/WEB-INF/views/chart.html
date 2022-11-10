@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width">
+    <link rel="stylesheet" href="/resources/css/style.css"/>
+</head>
+<body>
+<div class="container" id="container">
+</div>
+<script
+        src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script
+        src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
+<script th:inline="javascript">
+    $(function(){
+        Highcharts.chart('container', {
+            chart: {
+                type: 'line'
+            },
+            title: {
+                text: undefined
+            },
+            xAxis: {
+                categories: [[${keySet}]]
+                ,
+                scaleLabel: {
+                    display: undefined,
+                    labelString: 'time'
+                }
+            },
+            yAxis: {
+                min: [[${minRate}]],
+                max: [[${maxRate}]],
+                title: {
+                    text: false
+                }
+            },
+            tooltip: {
+                footerFormat: '</table>',
+                shared: true,
+                useHTML: true
+            },
+            plotOptions: {
+                column: {
+                    pointPadding: 0.2,
+                    borderWidth: 0.5
+                }
+            },
+            series: [{
+                name: [[#{currency.rate}]],
+                data: [[${values}]],
+                color: "red"
+            }]
+        });
+    });
+</script>
+</body>
+</html>

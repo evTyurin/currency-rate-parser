@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width">
+    <title>Title</title>
+    <link rel="stylesheet" href="/resources/css/style.css"/>
+    <script>
+        function validateDates()
+        {
+            var startDate = new Date(document.getElementById("start").value);
+            var endDate = new Date(document.getElementById("end").value);
+            var today = new Date();
+            var currantDate = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+            var minDate = new Date(2021, 7, 9);
+            var exceptionMessage;
+
+            if (document.getElementById("form")) {
+                if (startDate < minDate || endDate < minDate) {
+                    exceptionMessage ="[[#{wrong.old.range}]]";
+                    showException(exceptionMessage);
+                } else if (startDate > currantDate) {
+                    exceptionMessage ="[[#{wrong.date.from}]]";
+                    showException(exceptionMessage);
+                } else if (endDate > currantDate) {
+                    exceptionMessage ="[[#{wrong.date.to}]]";
+                    showException(exceptionMessage);
+                } else if(startDate > endDate) {
+                    exceptionMessage ="[[#{wrong.range}]]";
+                    showException(exceptionMessage);
+                } else if (!(startDate <= endDate)){
+                    exceptionMessage ="[[#{unfilled.date}]]";
+                    showException(exceptionMessage);
+                }
+                else {
+                    document.getElementById("form").submit();
+                }
+            }
+        }
+
+        function showException (message) {
+            document.getElementById("output").style.color='red';
+            document.getElementById("output").innerHTML=message;
+            setTimeout(
+                "window.location.reload()", 5000);
+        }
+    </script>
+</head>
+<body>
+<div class="container">
+    <div class="content">
+        <form id="form" action="#" th:action="@{/index}" method="post" th:object="${currency}">
+            <div class="currency-details">
+                <div class="input-box">
+                    <span class="details">[[#{currency.type}]]</span>
+                </div>
+                <div class="input-box">
+                    <select id="type" th:field="*{name}">
+                        <option th:value="440" th:text="#{australian.dollar}"></option>
+                        <option th:value="510" th:text="#{armenian.dram}"></option>
+                        <option th:value="514" th:text="#{brazilian.reals}"></option>
+                        <option th:value="449" th:text="#{hryvnia}"></option>
+                        <option th:value="450" th:text="#{danish.kroner}"></option>
+                        <option th:value="431" th:text="#{us.dollar}"></option>
+                    </select>
+                </div>
+                <div class="input-box">
+                    <span class="details">[[#{date.from}]]</span>
+                </div>
+                <div class="input-box">
+                    <input id="start" th:field="*{start}" type="date" >
+                </div>
+                <div class="input-box">
+                    <span class="details">[[#{date.to}]]</span>
+                </div>
+                <div class="input-box">
+                    <input id="end" th:field="*{end}" type="date" >
+                </div>
+                <button class="button" type="button" onclick="validateDates()">[[#{press.button}]]</button>
+            </div>
+        </form>
+        <p id="output"></p>
+    </div>
+</div>
+</body>
+</html>
